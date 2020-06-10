@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {Text, StyleSheet, View} from 'react-native';
+import {Text, StyleSheet, View, Button} from 'react-native';
 import {ApiService} from '../../services/api';
 
 const styles = StyleSheet.create({
@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const ProfilePage = () => {
+const ProfilePage = ({navigation}) => {
   const [user, setUser] = useState({});
 
   const fetchUserData = useCallback(async () => {
@@ -23,21 +23,28 @@ const ProfilePage = () => {
     }
   }, []);
 
+  const handleOnPress = () => navigation.navigate('About');
+
   useEffect(() => {
     fetchUserData();
   }, [fetchUserData]);
 
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerStyle: {
+        backgroundColor: 'red',
+      },
+    });
+  });
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Welcome {user.name ?? 'Guest'} </Text>
+      <Button title="Go to about page..." onPress={handleOnPress} />
     </View>
   );
 };
 
-ProfilePage.navigationOptions = {
-  headerStyle: {
-    backgroundColor: 'red',
-  },
-};
+const _ProfilePage = ProfilePage;
 
-export default ProfilePage;
+export default _ProfilePage;
