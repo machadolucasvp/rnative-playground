@@ -1,5 +1,12 @@
-import React from 'react';
-import {View, Text, ScrollView} from 'react-native';
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  ScrollView,
+  SafeAreaView,
+  StyleSheet,
+  Animated,
+} from 'react-native';
 import {Header} from '../../components';
 
 const items = [
@@ -15,6 +22,21 @@ const items = [
   {id: 10, name: 'Testing Long Scroll'},
 ];
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  item: {
+    marginBottom: 74,
+    height: 24,
+    width: '100%',
+  },
+  itemText: {
+    color: 'red',
+    fontSize: 24,
+  },
+});
+
 const AboutPage = ({navigation}) => {
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -23,16 +45,25 @@ const AboutPage = ({navigation}) => {
     });
   });
 
+  const [scrollY, setScrollY] = useState(new Animated.Value(0));
+
   return (
     <>
-      <Header />
-      <ScrollView>
-        {items.map((item) => {
-          <View key={item.id}>
-            <Text>{item.name}</Text>
-          </View>;
-        })}
-      </ScrollView>
+      <SafeAreaView style={styles.container}>
+        <Header scrollY={scrollY} />
+        <ScrollView
+          onScroll={Animated.event([
+            {nativeEvent: {contentOffset: {y: scrollY}}},
+          ])}>
+          {items.map((item) => {
+            return (
+              <View key={item.id} style={styles.item}>
+                <Text style={styles.itemText}>{item.name}</Text>
+              </View>
+            );
+          })}
+        </ScrollView>
+      </SafeAreaView>
     </>
   );
 };
