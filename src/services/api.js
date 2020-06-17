@@ -9,6 +9,7 @@ const mockApiService = {
 const mockUser = () => {
   return {
     name: 'Lucas Machado',
+    age: 99,
     imageUrl: 'http://....',
   };
 };
